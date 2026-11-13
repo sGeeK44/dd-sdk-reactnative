@@ -197,7 +197,10 @@ export class DdSdkReactNative {
         DdRumResourceTracking.updateTrackingContext({
             resourceTraceSampleRate:
                 builtConfiguration.rumConfiguration?.resourceTraceSampleRate ??
-                RUM_DEFAULTS.resourceTraceSampleRate
+                RUM_DEFAULTS.resourceTraceSampleRate,
+            sessionSampleRate:
+                builtConfiguration.rumConfiguration?.sessionSampleRate ??
+                RUM_DEFAULTS.sessionSampleRate
         });
 
         return DdSdkReactNative.initializeNativeSDK(builtConfiguration, {
@@ -567,7 +570,9 @@ export class DdSdkReactNative {
                 resourceTraceSampleRate,
                 firstPartyHosts,
                 trackFetchResources,
-                headerCaptureRules
+                headerCaptureRules,
+                sessionSampleRate:
+                    configuration.rumConfiguration?.sessionSampleRate
             });
         }
 

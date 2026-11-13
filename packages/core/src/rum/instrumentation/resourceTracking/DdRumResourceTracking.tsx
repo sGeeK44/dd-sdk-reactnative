@@ -45,12 +45,14 @@ class RumResourceTracking {
         resourceTraceSampleRate,
         firstPartyHosts,
         trackFetchResources = false,
-        headerCaptureRules
+        headerCaptureRules,
+        sessionSampleRate
     }: {
         resourceTraceSampleRate: number;
         firstPartyHosts: FirstPartyHost[];
         trackFetchResources?: boolean;
         headerCaptureRules?: 'defaults' | HeaderCaptureRule[] | undefined;
+        sessionSampleRate?: number;
     }): void {
         // extra safety to avoid proxying the XHR class twice
         if (this._isTracking) {
@@ -99,6 +101,12 @@ class RumResourceTracking {
         DistributedTracingSampling.setResourceTraceSampleRate(
             resourceTraceSampleRate
         );
+        // Trace sampling is rebased on the RUM session sample rate. Until it
+        // is known (e.g. DatadogProvider.initialize), 100 keeps the decision
+        // on the trace sample rate alone.
+        DistributedTracingSampling.setSessionSampleRate(
+            sessionSampleRate ?? 100
+        );
     }
 
     /**
@@ -109,9 +117,11 @@ class RumResourceTracking {
      * later. No-op if tracking has not started.
      */
     updateTrackingContext({
-        resourceTraceSampleRate
+        resourceTraceSampleRate,
+        sessionSampleRate
     }: {
         resourceTraceSampleRate: number;
+        sessionSampleRate?: number;
     }): void {
         if (!this._isTracking) {
             return;
@@ -127,6 +137,9 @@ class RumResourceTracking {
         DistributedTracingSampling.setResourceTraceSampleRate(
             resourceTraceSampleRate
         );
+        if (sessionSampleRate !== undefined) {
+            DistributedTracingSampling.setSessionSampleRate(sessionSampleRate);
+        }
     }
 
     stopTracking(): void {

@@ -754,6 +754,7 @@ describe('DdSdkReactNative', () => {
                 { trackFetchResources: true }
             );
             configuration.rumConfiguration.resourceTraceSampleRate = 42;
+            configuration.rumConfiguration.sessionSampleRate = 64;
             configuration.rumConfiguration.firstPartyHosts = [
                 {
                     match: 'api.example.com',
@@ -815,7 +816,8 @@ describe('DdSdkReactNative', () => {
                     }
                 ],
                 trackFetchResources: true,
-                headerCaptureRules: undefined
+                headerCaptureRules: undefined,
+                sessionSampleRate: 64
             });
         });
 
